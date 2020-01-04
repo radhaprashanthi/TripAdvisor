@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Profile</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<script>
+    window.onload = function() {
+    var errorMsg = "$errorMessage";
+    if (errorMsg != null)
+        document.getElementById('errorMsg').style.display = 'none';
+    };
+
+</script>
+<style>
+body {
+  background-image: url("https://wallpaperaccess.com/full/257777.jpg");
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+</style>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img src="https://image.flaticon.com/icons/svg/1216/1216732.svg" class="img-rounded" width="100" height="50">
+        </div>
+        <ul class="nav navbar-nav">
+            <a class="navbar-brand" href="#">Trip Advisor</a>
+            <li><a class="navbar-brand" href="/welcome">Home</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login?logout" data-toggle="tooltip" title="Logout">LOGOUT</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+<div class="row">
+    <div class="col-sm-6">
+
+    <div id="savedHotels">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4><b>Saved hotels</b></h4>
+            </div>
+            <div class="panel-body">
+                <a href="#" id="savedLinks">Clear list</a>
+                <script type="text/javascript">
+                                document.getElementById("savedLinks").onclick = function () {
+                                location.href = "/profile?clearSavedHotels=true";
+                                };
+
+                    </script>
+
+                #foreach($hotel in $savedHotels)
+                <ul class="list-group">
+                    <li  class="list-group-item"><a id = $hotel.id href="#">$hotel.name</a>
+                    <a href="/profile?savedHotel=true&hotelId=$hotel.id"><i class="glyphicon glyphicon-trash" id=$hotel.name></i></a>
+                    <!--<button id = $hotel.id type="button" class="btn btn-primary" > Hotel info </button>-->
+                    <script type="text/javascript">
+                        document.getElementById($hotel.id).onclick = function () {
+                        location.href = "/hotelInfo?hotelId=" + $hotel.id;
+                        };
+
+                    </script>
+                    </li>
+                </ul>
+                #end
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+    <div class="col-sm-6">
+        <div id="visitedLinks">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h4><b>Visited Expedia links</b></h4></div>
+                <div class="panel-body">
+                    <a href="#" id="clearVisitedLink">Clear list</a>
+                    <script type="text/javascript">
+                                document.getElementById("clearVisitedLink").onclick = function () {
+                                location.href = "/profile?clearVisitedLinks=true";
+                                };
+
+                    </script>
+                    #foreach($id in $visitedLinks)
+                    <ul class="list-group">
+                        <li  class="list-group-item"><a id = $id href="#">https://www.expedia.com/h$id/Hotel-Information</a>
+                            <a href="/profile?visitedLink=true&hotelId=$id"><i class="glyphicon glyphicon-trash"></i></a>
+                            <script type="text/javascript">
+                                document.getElementById($id).onclick = function () {
+                                var link = "https://www.expedia.com/h"+$id+".Hotel-Information";
+                                window.open(link, '_blank');
+                                };
+
+                            </script>
+                        </li>
+                    </ul>
+                    #end
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-10">
+
+        <div id="Reviews">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4><b>Reviews history</b></h4>
+                </div>
+                <div class="panel-body">
+                    <a href="#" id="reviewsByUser">Clear list</a>
+                    <script type="text/javascript">
+                                document.getElementById("reviewsByUser").onclick = function () {
+                                location.href = "/profile?clearReviews=true";
+                                };
+
+                    </script>
+
+                    #foreach($review in $reviews)
+                    <ul class="list-group">
+                        <li  class="list-group-item">
+                        <p>Title: $review.title</p>
+                        <p>Text: $review.reviewText</p>
+                        <p>Rating: $review.rating</p>
+                        <a href="/profile?deleteReview=true&reviewId=$review.reviewId"><i class="glyphicon glyphicon-trash"><b>Delete</b></i></a>&nbsp;&nbsp;&nbsp;
+                        <a href="/editReview?hotelId=$review.hotelId&reviewId=$review.reviewId"><i class="glyphicon glyphicon-pencil"><b>Edit </b></i></a>
+                        </li>
+                    </ul>
+                    #end
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</body>
+</html>
+

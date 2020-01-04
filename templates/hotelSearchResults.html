@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Search Results</title>
+</head>
+<body>
+<section>
+    <br>
+    <div id="searchResults" class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h4><b>Search results </b></h4></div>
+            <div class="panel-body">
+                #foreach($hotel in $hotels)
+                <ul class="list-group">
+                    <li class="list-group-item disabled"><a id = $hotel.id href="/hotelInfo?hotelId=$hotel.id">$hotel.name</a>
+
+                    <!--<button id = $hotel.id type="button" class="btn btn-primary" > Hotel info </button>-->
+                    <script type="text/javascript">
+                document.getElementById($hotel.id).onclick = function () {
+                location.href = "/hotelInfo?hotelId=" + $hotel.id;
+                };
+            </script>
+                    <br>
+                    #if($hotel.avgRating != "0.0" && $hotel.avgRating != "0")
+                    Rating: <b>$hotel.avgRating</b>
+                    #end
+                    </li>
+                </ul>
+                #end
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+</body>
+</html>

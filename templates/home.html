@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<style>
+body {
+  background-image: url("https://wallpaperaccess.com/full/257777.jpg");
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+</style>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img src="https://image.flaticon.com/icons/svg/1216/1216732.svg" class="img-rounded" width="100" height="50">
+        </div>
+
+        <ul class="nav navbar-nav">
+            <a class="navbar-brand" href="#">Trip Advisor</a>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login" data-toggle="tooltip" title="Login">LOGIN</a></li>
+            <li><a href="/register" data-toggle="tooltip" title="Register">REGISTER</a></li>
+        </ul>
+    </div>
+</nav>
+
+</div>
+
+
+
+          <div  class="container" id="map" style="width: 500px; height: 400px;"></div>
+           <script>
+                var locations = "$hotels";
+
+                var geocoder;
+                var map;
+                var bounds = new google.maps.LatLngBounds();
+
+                function initialize() {
+                    map = new google.maps.Map(
+                    document.getElementById("map"), {
+                        center: new google.maps.LatLng(37.4419, -122.1419),
+                        zoom: 13,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    });
+                    geocoder = new google.maps.Geocoder();
+
+                    for (i = 0; i < locations.length; i++) {
+
+
+                        geocodeAddress(locations, i);
+                    }
+                }
+                google.maps.event.addDomListener(window, "load", initialize);
+
+                function geocodeAddress(locations, i) {
+                    var title = locations[i][0];
+                    var address = locations[i][1];
+                    var url = locations[i][2];
+                    geocoder.geocode({
+                        'address': locations[i][1]
+                    },
+
+                    function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var marker = new google.maps.Marker({
+                                icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
+                                map: map,
+                                position: results[0].geometry.location,
+                                title: title,
+                                animation: google.maps.Animation.DROP,
+                                address: address,
+                                url: url
+                            })
+                            infoWindow(marker, map, title, address, url);
+                            bounds.extend(marker.getPosition());
+                            map.fitBounds(bounds);
+                        } else {
+                            alert("geocode of " + address + " failed:" + status);
+                        }
+                    });
+                }
+
+                function infoWindow(marker, map, title, address, url) {
+                    google.maps.event.addListener(marker, 'click', function () {
+                        var html = "<div><h3>" + title + "</h3><p>" + address + "<br></div><a href='" + url + "'>View location</a></p></div>";
+                        iw = new google.maps.InfoWindow({
+                            content: html,
+                            maxWidth: 350
+                        });
+                        iw.open(map, marker);
+                    });
+                }
+
+                function createMarker(results) {
+                    var marker = new google.maps.Marker({
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
+                        map: map,
+                        position: results[0].geometry.location,
+                        title: title,
+                        animation: google.maps.Animation.DROP,
+                        address: address,
+                        url: url
+                    })
+                    bounds.extend(marker.getPosition());
+                    map.fitBounds(bounds);
+                    infoWindow(marker, map, title, address, url);
+                    return marker;
+                }
+
+
+           </script>
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARcVOHXssa0n0PKcFH9_H9p7jQnHFduCM&callback=initMap">
+            </script>
+
+
+
+
+</body>
+</html>
+

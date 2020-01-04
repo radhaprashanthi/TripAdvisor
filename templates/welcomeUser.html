@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Welcome</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<script>
+    window.onload = function() {
+    var errorMsg = "$errorMessage";
+    if (errorMsg != null)
+        document.getElementById('errorMsg').style.display = 'none';
+    };
+
+    function showSearchResults(city, name){
+        var xhttp = new XMLHttpRequest();
+        if (city == "" && name == "") {
+	        document.getElementById("searchResultsCity").innerHTML = "<p class=\"text-danger container\">No city and search word selected </p>";
+	        return;
+        }
+
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("searchResultsCity").innerHTML = this.responseText;
+        }
+        };
+        xhttp.open("GET", "hotelSearch?city=" + city + "&name=" + name, true);
+        xhttp.send();
+    }
+</script>
+<style>
+body {
+  background-image: url("https://wallpaperaccess.com/full/257777.jpg");
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+</style>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img src="https://image.flaticon.com/icons/svg/1216/1216732.svg" class="img-rounded" width="100" height="50">
+        </div>
+        <ul class="nav navbar-nav">
+            <a class="navbar-brand" href="#">Trip Advisor</a>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/profile" data-toggle="tooltip" title="Profile">PROFILE</a></li>
+            <li><a href="/login?logout" data-toggle="tooltip" title="Logout">LOGOUT</a></li>
+        </ul>
+    </div>
+</nav>
+
+<p><font color="green"> <h5><b>$lastLogin</b></h5></font></p>
+<section class="search-sec">
+    <div class="container">
+        <p><font color="white"> <h2>$welcomeMsg</h2></font></p>
+
+        <form action="/welcome" method="post" novalidate="novalidate">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                            <select class="form-control search-slt" id="hotelCity">
+                                <option value="" disabled selected>Choose your city</option>
+                                #foreach($city in $cities)
+                                <option value='"$city"'>$city</option>
+                                #end
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                            <input type="text" id="hotelName" class="form-control search-slt" placeholder="Enter hotel name">
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                            <button type="button" id="search" class="btn btn-danger wrn-btn" onclick="showDiv()">Search</button>
+                            <script type="text/javascript">
+                                function showDiv() {
+                                    var name = document.getElementById("hotelName").value;
+                                    var city = document.getElementById("hotelCity").value;
+                                    if (typeof name == 'undefined') name1 = '';
+                                    else name1 = name;
+                                    if (typeof city == 'undefined') city1 = '';
+                                    else city1 = city;
+                                    showSearchResults(city1,name1);
+                                }
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+<div id="searchResultsCity"></div>
+
+
+
+
+</body>
+</html>
+
